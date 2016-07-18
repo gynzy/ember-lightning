@@ -6,6 +6,4 @@ ENV APP_NAME "leerling"
 ENV REDIS_PORT 6379
 ENV REDIS_HOST redis
 
-./node_modules/.bin/babel-node index.js
-
 CMD [ "./node_modules/.bin/babel-node", "index.js" ]
