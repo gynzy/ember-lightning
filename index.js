@@ -1,6 +1,6 @@
 'use strict';
 
-const redis = require('ioredis'),
+const Redis = require('ioredis'),
 	Koa = require('koa');
 
 const redisOptions = {
