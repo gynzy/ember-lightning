@@ -1,7 +1,13 @@
 'use strict';
 
-const Koa = require('koa');
+const Redis = require('ioredis'),
+	Koa = require('koa');
 
+
+const redisOptions = {
+	host: process.env.REDIS_SENTINEL_SERVICE_HOST,
+	port: process.env.REDIS_SENTINEL_SERVICE_PORT
+};
 
 console.log('process.env.REDIS_HOST', process.env.REDIS_SENTINEL_SERVICE_HOST);
 console.log('process.env.REDIS_PORT', process.env.REDIS_SENTINEL_SERVICE_PORT);
@@ -9,14 +15,10 @@ console.log('process.env.REDIS_SECRET', process.env.REDIS_SECRET);
 
 const app = exports.app = new Koa();
 
-var client = require('ioredis')({
-	sentinels: [{
-		host: process.env.REDIS_SENTINEL_SERVICE_HOST,
-		port: process.env.REDIS_SENTINEL_SERVICE_PORT
-	}],
+var client = new Redis({
+	sentinels: [redisOptions],
 	name: 'mymaster',
-	password: process.env.REDIS_SECRET,
-	db: 1
+	password: process.env.REDIS_SECRET
 });
 
 app.use(async ctx => {

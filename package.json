@@ -25,7 +25,7 @@
   },
   "homepage": "https://github.com/philipheinser/ember-lightning",
   "dependencies": {
-    "ioredis": "^1.15.1",
+    "ioredis": "^2.2.0",
     "koa": "2.0.0"
   },
   "engines": {
