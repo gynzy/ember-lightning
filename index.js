@@ -6,8 +6,7 @@ const Redis = require('ioredis'),
 
 const redisOptions = {
 	host: process.env.REDIS_HOST,
-	port: process.env.REDIS_PORT,
-	password: process.env.REDIS_SECRET
+	port: process.env.REDIS_PORT
 };
 
 console.log('process.env.REDIS_HOST', process.env.REDIS_HOST);
@@ -17,8 +16,9 @@ console.log('process.env.REDIS_SECRET', process.env.REDIS_SECRET);
 const app = exports.app = new Koa();
 
 var client = new Redis({
-  sentinels: [redisOptions],
-  name: 'mymaster'
+	sentinels: [redisOptions],
+	name: 'mymaster',
+	password: process.env.REDIS_SECRET
 });
 
 app.use(async ctx => {
