@@ -5,12 +5,12 @@ const Redis = require('ioredis'),
 
 
 const redisOptions = {
-	host: process.env.REDIS_HOST,
-	port: process.env.REDIS_PORT
+	host: process.env.REDIS_SENTINEL_SERVICE_HOST,
+	port: process.env.REDIS_SENTINEL_SERVICE_PORT
 };
 
-console.log('process.env.REDIS_HOST', process.env.REDIS_HOST);
-console.log('process.env.REDIS_PORT', process.env.REDIS_PORT);
+console.log('process.env.REDIS_HOST', process.env.REDIS_SENTINEL_SERVICE_HOST);
+console.log('process.env.REDIS_PORT', process.env.REDIS_SENTINEL_SERVICE_PORT);
 console.log('process.env.REDIS_SECRET', process.env.REDIS_SECRET);
 
 const app = exports.app = new Koa();
