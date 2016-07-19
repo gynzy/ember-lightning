@@ -1,6 +1,6 @@
 'use strict';
 
-const redis = require('then-redis'),
+const redis = require('ioredis'),
 	Koa = require('koa');
 
 const redisOptions = {
@@ -9,11 +9,11 @@ const redisOptions = {
 	password: process.env.REDIS_SECRET
 };
 
-const app = exports.app = new Koa(),
-	client = redis.createClient(redisOptions);
+const app = exports.app = new Koa();
 
-client.on('error', function (err) {
-	console.log('Redis client error: ' + err);
+var client = new Redis({
+  sentinels: [redisOptions],
+  name: 'mymaster'
 });
 
 app.use(async ctx => {
