@@ -3,11 +3,16 @@
 const Redis = require('ioredis'),
 	Koa = require('koa');
 
+
 const redisOptions = {
 	host: process.env.REDIS_HOST,
 	port: process.env.REDIS_PORT,
 	password: process.env.REDIS_SECRET
 };
+
+console.log('process.env.REDIS_HOST', process.env.REDIS_HOST);
+console.log('process.env.REDIS_PORT', process.env.REDIS_PORT);
+console.log('process.env.REDIS_SECRET', process.env.REDIS_SECRET);
 
 const app = exports.app = new Koa();
 
