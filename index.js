@@ -15,7 +15,8 @@ var client = require('ioredis')({
 		port: process.env.REDIS_SENTINEL_SERVICE_PORT
 	}],
 	name: 'mymaster',
-	password: process.env.REDIS_SECRET
+	password: process.env.REDIS_SECRET,
+	db: 1
 });
 
 app.use(async ctx => {
