@@ -18,7 +18,8 @@ const app = exports.app = new Koa();
 var client = new Redis({
 	sentinels: [redisOptions],
 	name: 'mymaster',
-	password: process.env.REDIS_SECRET
+	password: process.env.REDIS_SECRET,
+	db: 1
 });
 
 app.use(async ctx => {
