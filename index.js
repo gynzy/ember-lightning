@@ -1,5 +1,3 @@
-require('babel-polyfill');
-
 const bunyan = require('bunyan');
 const Redis = require('ioredis');
 const Koa = require('koa');
