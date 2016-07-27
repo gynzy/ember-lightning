@@ -32,7 +32,7 @@ let redisOptions = {
 	db: 1
 };
 
-if (sentinelOptions.host && sentinelOptions.port) {
+if (sentinelOptions.length > 0 && sentinelOptions[0].host && sentinelOptions[0].port) {
 	redisOptions.sentinels = sentinelOptions;
 } else {
 	redisOptions.host = process.env.REDIS_HOST;
