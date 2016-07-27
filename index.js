@@ -55,6 +55,7 @@ app.use(async(ctx, next) => {
 		if (user && user.name == auth.name && user.pass == auth.pass) {
 			await next();
 		} else {
+			log.info('user ', user.name, ' with pass ', user.pass, ' is not ', auth.name, 'with ', auth.pass);
 			ctx.status = 401;
 			ctx.body = 'Access denied: need basic-auth user/pass';
 		}
