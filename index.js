@@ -50,7 +50,7 @@ app.use(compress());
  * Require basisc auth on all ember-revisions routes
  */
 app.use(async(ctx, next) => {
-	if (ctx.path !== '/') {
+	if (ctx.path !== '/' && ctx.path !== '/health') {
 		let user = basicAuth(ctx);
 		if (user && user.name == auth.name && user.pass == auth.pass) {
 			await next();
@@ -65,14 +65,30 @@ app.use(async(ctx, next) => {
 });
 
 /*
+ * GET /health
+ */
+app.use(async(ctx, next) => {
+	if (ctx.method === 'GET' && ctx.path === '/health') {
+		ctx.body = 'ok';
+		ctx.status = 200;
+	} else {
+		await next();
+	}
+});
+
+/*
  * GET / (current-content)
  * param: prefix (ember app name)
  * param: revision (revision hash)
+ *
+ * TODO: build in-memory cache and google bucket (ember-cli-deploy-gcloud-index) fallback when redis is dead
  */
 app.use(async(ctx, next) => {
-	// fetch
 	if (ctx.method === 'GET' && ctx.path === '/') {
 		let indexkey;
+		// TODO determine appPrefix based on url (domains need a mapping to app names in the db here)
+		// we can point gynzykids.com, kids.gynzy.com, beheer.gynzy.net, dracarys.gynzy.com, etc. to this service, it can then serve
+		// each index, based on mappings to the right index in redis
 		let appPrefix = ctx.request.query.prefix || 'leerling';
 		let revision = ctx.query.revision;
 		if (revision) {
