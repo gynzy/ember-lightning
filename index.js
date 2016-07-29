@@ -6,7 +6,6 @@ const bodyParser = require('koa-bodyparser');
 const logger = require('koa-logger');
 const compress = require('koa-compress');
 const json = require('koa-json');
-const enforceHttps = require('koa-sslify');
 
 const currentKey = 'current';
 const currentContentKey = 'current-content';
@@ -46,11 +45,6 @@ app.use(logger());
 app.use(json());
 app.use(bodyParser());
 app.use(compress());
-
-// Force HTTPS on all page
-app.use(enforceHttps({
-	trustProtoHeader: true
-}));
 
 /*
  * Require basisc auth on all ember-revisions routes
