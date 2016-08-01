@@ -23,5 +23,6 @@ module.exports.get = function (indexkey) {
 };
 
 module.exports.set = function (indexkey, value) {
-	cache.indexkey = value;
+	log.info('Setting cache for ' + indexkey);
+	cache[indexkey] = value;
 };

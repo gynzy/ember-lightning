@@ -22,11 +22,11 @@ module.exports = async(ctx, next) => {
 			} catch (error) {
 				log.info(error);
 				ctx.body = 'Error when adding new revision with index.html';
-				ctx.status = 400;
+				ctx.status = 500;
 			}
 		} else {
 			ctx.body = 'JSON body with keys id and body is required.';
-			ctx.status = 403;
+			ctx.status = 400;
 		}
 	} else {
 		await next();
