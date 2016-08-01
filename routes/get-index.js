@@ -37,20 +37,27 @@ module.exports = async(ctx, next) => {
 		}
 		let index;
 		try {
-			index = cache.get(indexkey);
+			index = await redis.client.get(indexkey);
+			if (index) {
+				// set the backup cache for indexkey to this index on every get
+				cache.set(indexkey, index);
+				ctx.body = index;
+				ctx.status = 200;
+			} else {
+				// no such key
+				ctx.status = 404;
+			}
 		} catch (e) {
 			try {
-				index = await redis.client.get(indexkey);
-				// set the cache for indexkey to this index
-				cache.set(indexkey, index);
+				log.info('Redis is down, using in-memory cache as fallback.', e);
+				index = cache.get(indexkey);
+				ctx.body = index;
+				ctx.status = 200;
 			} catch (e) {
 				log.error('Failed to fetch key from redis and from cache.', e);
+				ctx.body = 'No such key in redis or cache, Redis could be down though...';
+				ctx.status = 500;
 			}
-		}
-		if (index) {
-			ctx.body = index;
-		} else {
-			ctx.status = 404;
 		}
 	} else {
 		await next();

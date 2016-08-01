@@ -23,12 +23,9 @@ module.exports = async(ctx, next) => {
 			let currentKey = appPrefix + ':' + redis.currentKey;
 			let currentContentKey = appPrefix + ':' + redis.currentContentKey;
 			try {
-        // update redis
+				// update redis, cache invalidation is done on next get
 				await redis.client.set(currentKey, rev);
-        // update cache
-				cache.set(currentKey, rev);
 				await redis.client.set(currentContentKey, index);
-				cache.set(currentContentKey, index);
 				ctx.status = 204;
 			} catch (error) {
 				log.info(error);
