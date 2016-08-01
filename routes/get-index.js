@@ -42,7 +42,7 @@ module.exports = async(ctx, next) => {
 			try {
 				index = await redis.client.get(indexkey);
 				// set the cache for indexkey to this index
-				cache[indexkey] = index;
+				cache.set(indexkey, index);
 			} catch (e) {
 				log.error('Failed to fetch key from redis and from cache.', e);
 			}
