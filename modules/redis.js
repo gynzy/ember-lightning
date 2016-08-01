@@ -5,7 +5,7 @@ const sentinelOptions = [{
 }];
 let redisOptions = {
 	name: 'mymaster',
-	password: process.env.REDIS_SECRET,
+	password: process.env.REDIS_SECRET.trim(),
 	db: 1
 };
 
