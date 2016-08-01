@@ -1,7 +1,7 @@
 const basicAuth = require('basic-auth');
 const auth = {
-	name: process.env.REST_USER,
-	pass: process.env.REST_PASS
+	name: process.env.REST_USER.trim(),
+	pass: process.env.REST_PASS.trim()
 };
 
 /*
@@ -10,7 +10,6 @@ const auth = {
 module.exports = async(ctx, next) => {
 	if (ctx.path !== '/' && ctx.path !== '/health') {
 		let user = basicAuth(ctx);
-		console.log(auth.name, auth.pass);
 		if (user && user.name === auth.name && user.pass === auth.pass) {
 			await next();
 		} else {
