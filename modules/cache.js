@@ -18,6 +18,6 @@ module.exports.get = function (indexkey) {
 		return cache[indexkey];
 	} else {
 		log.info('Cache miss for ' + indexkey);
-		return;
+		throw new Error('Cache miss for ' + indexkey);
 	}
 };
