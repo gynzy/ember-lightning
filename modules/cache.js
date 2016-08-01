@@ -21,3 +21,7 @@ module.exports.get = function (indexkey) {
 		throw new Error('Cache miss for ' + indexkey);
 	}
 };
+
+module.exports.set = function (indexkey, value) {
+	cache.indexkey = value;
+};
