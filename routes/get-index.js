@@ -1,25 +1,52 @@
+const bunyan = require('bunyan');
 const redis = require('../modules/redis');
+const cache = require('../modules/cache');
+let log = bunyan.createLogger({
+	name: 'index'
+});
+
+const DOMAIN_APP_MAPPING = {
+	'https://www.gynzykids.com': 'leerling',
+	'https://kids.gynzy.com': 'leerling',
+	'https://ralf.gynzykids.com': 'leerling'
+};
+
 /*
  * GET / (current-content)
  * param: prefix (ember app name)
  * param: revision (revision hash)
- *
- * TODO: build in-memory cache and google bucket (ember-cli-deploy-gcloud-index) fallback when redis is dead
  */
 module.exports = async(ctx, next) => {
 	if (ctx.method === 'GET' && ctx.path === '/') {
 		let indexkey;
-		// TODO determine appPrefix based on url (domains need a mapping to app names in the db here)
-		// we can point gynzykids.com, kids.gynzy.com, beheer.gynzy.net, dracarys.gynzy.com, etc. to this service, it can then serve
-		// each index, based on mappings to the right index in redis
-		let appPrefix = ctx.request.query.prefix || 'leerling';
+		let appPrefix = ctx.request.query.prefix;
+		if (!appPrefix) {
+			// TODO move the domain key/value list to redis and add endpoint to add them on-the-fly
+			if (DOMAIN_APP_MAPPING.hasOwnProperty(ctx.request.origin)) {
+				appPrefix = DOMAIN_APP_MAPPING[ctx.request.origin];
+			} else {
+				// As a fallback we serve the leerling index
+				appPrefix = 'leerling';
+			}
+		}
 		let revision = ctx.query.revision;
 		if (revision) {
 			indexkey = appPrefix + ':' + revision;
 		} else {
 			indexkey = appPrefix + ':' + redis.currentContentKey;
 		}
-		let index = await redis.client.get(indexkey);
+		let index;
+		try {
+			index = cache.get(indexkey);
+		} catch (e) {
+			try {
+				index = await redis.client.get(indexkey);
+				// set the cache for indexkey to this index
+				cache[indexkey] = index;
+			} catch (e) {
+				log.error('Failed to fetch key from redis and from cache.', e);
+			}
+		}
 		if (index) {
 			ctx.body = index;
 		} else {

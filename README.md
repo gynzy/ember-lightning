@@ -1,7 +1,5 @@
 # ember-lightning
-Ember lightning hosting for https://github.com/ember-cli/ember-cli-deploy
-
-[![Deploy](https://www.herokucdn.com/deploy/button.svg)](https://heroku.com/deploy?template=https://github.com/philipheinser/ember-lightning)
+Ember lightning hosting for https://github.com/ember-cli/ember-cli-deploy with https://github.com/customerio/ember-cli-deploy-rest.
 
 # Docker support
 
@@ -14,27 +12,13 @@ docker build --tag ember-lightning .
 Then, to serve an ember-cli application run the container:
 
 ```shell
-docker run --name $APP_NAME --env APP_NAME=$APP_NAME --env REDIS_HOST=your-redis-server.example.com ember-lightning:latest
+docker run --name ls --env REST_USER=someuser --env REST_PASS=randompass --env REDIS_HOST=your-redis-server.example.com --env REDIS_PORT=6379 --REDIS_SECRET=optionalsecret ember-lightning:latest
 ```
 
-The image responds to these environment variables:
+# ember-cli-deploy-rest
 
-### `APP_NAME`
+This service has endpoints that work with ember-cli-deploy-rest (https://github.com/customerio/ember-cli-deploy-rest). Use `REST_USER` and `REST_PASS` to define the basic auth for the endpoints and use those in your `deploy.js` configuration.
 
-The name of the application as deployed in Redis.
+# Sentinel support
 
-### `REDIS_HOST`
-
-The hostname of the Redis server where ember-cli applications are deployed.
-This default to `redis` and so it is also possible to use Docker container
-links to connect the ember-lightning container to a running Redis container.
-
-### `REDIS_PORT`
-
-The port that Redis is listening on. Defaults to 6379. This only needs to be
-set if Redis is listening on a non-default port.
-
-### `REDIS_SECRET`
-
-The shared secret to use for authenticating to Redis. It is blank by default,
-which disables authentication.
+This service can work with a sentinel setup. Use `REDIS_SENTINEL_SERVICE_HOST` and `REDIS_SENTINEL_SERVICE_PORT` instead of `REDIS_HOST` and `REDIS_PORT` in your environment.

@@ -1,5 +1,6 @@
 const bunyan = require('bunyan');
 const redis = require('../../modules/redis');
+const cache = require('../../modules/cache');
 let log = bunyan.createLogger({
 	name: 'post-revision'
 });
@@ -19,9 +20,15 @@ module.exports = async(ctx, next) => {
 		if (index) {
 			// change the current-content to this index.html
 			// change the current to this hash (rev)
+			let currentKey = appPrefix + ':' + redis.currentKey;
+			let currentContentKey = appPrefix + ':' + redis.currentContentKey;
 			try {
-				await redis.client.set(appPrefix + ':' + redis.currentKey, rev);
-				await redis.client.set(appPrefix + ':' + redis.currentContentKey, index);
+        // update redis
+				await redis.client.set(currentKey, rev);
+        // update cache
+				cache.set(currentKey, rev);
+				await redis.client.set(currentContentKey, index);
+				cache.set(currentContentKey, index);
 				ctx.status = 204;
 			} catch (error) {
 				log.info(error);
