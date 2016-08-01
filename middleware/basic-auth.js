@@ -10,7 +10,8 @@ const auth = {
 module.exports = async(ctx, next) => {
 	if (ctx.path !== '/' && ctx.path !== '/health') {
 		let user = basicAuth(ctx);
-		if (user && user.name == auth.name && user.pass == auth.pass) {
+		console.log(auth.name, auth.pass);
+		if (user && user.name === auth.name && user.pass === auth.pass) {
 			await next();
 		} else {
 			ctx.status = 401;
