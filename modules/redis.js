@@ -3,7 +3,7 @@ const sentinelOptions = [{
 	host: process.env.REDIS_SENTINEL_SERVICE_HOST,
 	port: process.env.REDIS_SENTINEL_SERVICE_PORT
 }];
-const redisOptions = {
+let redisOptions = {
 	name: 'mymaster',
 	password: process.env.REDIS_SECRET,
 	db: 1
@@ -16,9 +16,11 @@ if (sentinelOptions.length > 0 && sentinelOptions[0].host && sentinelOptions[0].
 	redisOptions.port = process.env.REDIS_PORT;
 }
 
+let client = new Redis(redisOptions);
+
 module.exports = {
-	client: new Redis(redisOptions),
-	currentKey: 'current',
-	currentContentKey: 'current-content',
-	listKey: 'revisions'
+	'client': client,
+	'currentKey': 'current',
+	'currentContentKey': 'current-content',
+	'listKey': 'revisions'
 };
