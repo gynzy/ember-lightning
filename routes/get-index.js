@@ -8,7 +8,7 @@ let log = bunyan.createLogger({
 const DOMAIN_APP_MAPPING = {
 	'https://www.gynzykids.com': 'leerling',
 	'https://kids.gynzy.com': 'leerling',
-	'https://leerling.gynzy.com': 'leerling'
+	'https://leerling.gynzykids.com': 'leerling'
 };
 
 /*
